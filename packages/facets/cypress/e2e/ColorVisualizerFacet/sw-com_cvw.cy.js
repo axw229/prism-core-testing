@@ -11,7 +11,6 @@ describe('sw-color-visualizer-wrapper', () => {
     })
 
     it('paints an area of scene', () => {
-      cy.wait(10000)
       cy.findAllByTestId('MOUSE_LISTENER').first().click()
       cy.get('.tintable-view__wrapper > :nth-child(4)').snapshot({ name: 'scene' })
     })

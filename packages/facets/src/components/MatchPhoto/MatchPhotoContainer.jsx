@@ -6,37 +6,35 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { Color } from '../../shared/types/Colors'
 import type { ImageDimensions } from '../../shared/types/lib/CVWTypes'
 import PrismImage from '../PrismImage/PrismImage'
+import type { PrismImageData } from "../PrismImage/PrismImage.jsx";
 import { CircleLoader } from '../ToolkitComponents'
 import ColorPinsGenerationByHue from './workers/colorPinsGenerationByHue.worker'
 import MatchPhoto from './MatchPhoto'
 import './MatchPhotoContainer.scss'
 
 type MatchPhotoContainerProps = {
- imageUrl: string,
   colors: Color[],
+  imageDims: ImageDimensions,
+  imageUrl: string,
   maxSceneHeight: number,
-  scalingWidth: number,
-  // needed by current matchphoto
-  imageDims: ImageDimensions
+  scalingWidth: number
 }
 
-const baseClass = 'match-photo-container-wrapper'
-
 const MatchPhotoContainer = (props: MatchPhotoContainerProps) => {
-  const { imageUrl, colors, maxSceneHeight, scalingWidth, imageDims } = props
+  const { colors, imageDims, imageUrl, maxSceneHeight, scalingWidth } = props
   const imageRef = useRef()
-  const [imageData, setImageData] = useState(null)
-  const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
+  const [imageData, setImageData] = useState(null)
   const [imageIsPortrait, setImageIsPortrait] = useState(null)
   const [pins, setPins] = useState(null)
+  const [width, setWidth] = useState(0)
 
   const handleImageLoaded = (payload: PrismImageData) => {
-    const { data, width, height, isPortrait } = payload
-    setImageData(data)
-    setWidth(width)
+    const { data, height, isPortrait, width } = payload
     setHeight(height)
+    setImageData(data)
     setImageIsPortrait(isPortrait)
+    setWidth(width)
   }
 
   useEffect(() => {
@@ -57,18 +55,24 @@ const MatchPhotoContainer = (props: MatchPhotoContainerProps) => {
       colorPinsGenerationByHueWorker.addEventListener('message', messageHandler)
       colorPinsGenerationByHueWorker.postMessage({ imageData: imageData, imageDimensions: { width: width, height: height }, colors })
     }
-  }, [imageUrl, imageData, width, height, colors, pins])
-  return (<div className={baseClass}>
-    {imageUrl ? <PrismImage ref={imageRef} source={imageUrl} loadedCallback={handleImageLoaded} scalingWidth={scalingWidth} /> : null }
-    { pins
-      ? <MatchPhoto
-      imageUrl={imageUrl}
-      wrapperWidth={scalingWidth}
-      isPortrait={imageIsPortrait}
-      imageDims={imageDims}
-      pins={pins}
-      maxHeight={maxSceneHeight} />
-      : <CircleLoader /> }
+  }, [colors, height, imageData, imageUrl, pins, width])
+
+  return (<div className='match-photo-container-wrapper'>
+    {imageUrl && (
+      <PrismImage loadedCallback={handleImageLoaded} ref={imageRef} scalingWidth={scalingWidth} source={imageUrl} />
+    )}
+    {pins ? (
+      <MatchPhoto
+        imageUrl={imageUrl}
+        wrapperWidth={scalingWidth}
+        isPortrait={imageIsPortrait}
+        imageDims={imageDims}
+        pins={pins}
+        maxHeight={maxSceneHeight}
+      />
+    ) : (
+      <CircleLoader />
+    )}
   </div>)
 }
 
