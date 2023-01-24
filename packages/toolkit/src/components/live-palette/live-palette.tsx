@@ -53,7 +53,7 @@ const LivePalette = ({
   const activeSlotWidth = width / maxSlots + (widthDimension ? 0 : (width / maxSlots) * 0.16) * (maxSlots - 1)
   const activeColor = lpColors[lpActiveIndex] ?? lpColors[lpColors.length - 1]
 
-  const textColor = (color): string => (color?.isDark ? 'text-white' : 'text-black')
+  const textColor = (color: Color): string => (color?.isDark ? 'text-white' : 'text-black')
 
   return (
     <div {...otherProps} ref={ref} className={`w-full h-20 ${otherProps.className ?? ''}`}>

@@ -8,8 +8,7 @@
     "sourceMap": true,
 
     "strict": false,
-    // uncomment when all errors have been fixed
-    // "noImplicitAny": true,
+    "noImplicitAny": true,
 
     "jsx": "react",
     "moduleResolution": "node",

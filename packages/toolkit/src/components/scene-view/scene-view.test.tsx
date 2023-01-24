@@ -2,8 +2,7 @@ import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { SCENE_TYPES, SCENE_VARIANTS } from '../../constants'
 import { darkSlateBlueImage, darkTurquoiseImage, sw6084, sw7005 } from '../../test-utils/mock-data'
-import { CustomIcon } from '../../types'
-import { createMiniColorFromColor } from '../../utils/tintable-scene'
+import { CustomIcon, FlatVariant } from '../../types'
 import { TEST_ID_IMAGE_QUEUE_IMAGE } from '../image-queue/image-queue'
 import { TEST_ID as STS_TEST_ID } from '../simple-tintable-scene/simple-tintable-scene'
 import { TEST_ID as HA_TEST_ID } from '../simple-tintable-scene/simple-tintable-scene-hit-area'
@@ -12,7 +11,7 @@ import Toggle, { TEST_ID_CHECK, TEST_ID_ICON_0 } from '../toggle/toggle'
 import SceneView, { TEST_ID_CLEAR_BTN, TEST_ID_WRAPPER } from './scene-view'
 
 const content = { clearAreaText: 'clear button omega' }
-const surfaceColors = [createMiniColorFromColor(sw6084)]
+const surfaceColors = [sw6084]
 const selectedUid = 'scene-1'
 
 const surface1 = {
@@ -47,9 +46,8 @@ const scenesCollection = [
   }
 ]
 
-const variantsCollection = [
+const variantsCollection: FlatVariant[] = [
   {
-    id: 1,
     sceneUid: selectedUid,
     sceneId: 1,
     variantName: 'Alpha Day',
@@ -64,7 +62,6 @@ const variantsCollection = [
     isFirstOfKind: true
   },
   {
-    id: 2,
     sceneUid: selectedUid,
     sceneId: 1,
     variantName: 'Alpha Night ',
@@ -409,7 +406,7 @@ describe('Scene View', () => {
     const handleSurfacePainted = jest.fn(() => undefined)
     const handleToggle = jest.fn(() => undefined)
     const variants = [{ label: 'foo' }, { label: 'bar' }] as [CustomIcon, CustomIcon]
-    const customToggle = (index, list, data): JSX.Element => {
+    const customToggle = (): JSX.Element => {
       return <Toggle handleToggle={handleToggle} itemList={variants} />
     }
 

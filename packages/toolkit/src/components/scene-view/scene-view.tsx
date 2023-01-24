@@ -3,12 +3,11 @@
  * Ideally, the data would provide icon and label content. For now in order to support the primary toggle use case day/night this comp
  * includes the imported icon assets.  this evolved from the SceneManager -> SingleTintableScene
  */
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { ReactNode, SyntheticEvent, useEffect, useState } from 'react'
 import { faEraser, faMoonStars, faSun } from '@fortawesome/pro-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BUTTON_POSITIONS, SCENE_VARIANTS } from '../../constants'
-import { Color, CustomIcon, FlatScene, FlatVariant, MiniColor } from '../../types'
-import { createMiniColorFromColor } from '../../utils/tintable-scene'
+import { BasicVariant, Color, CustomIcon, FlatScene, FlatVariant } from '../../types'
 import { copySurfaceColors } from '../../utils/utils'
 import BatchImageLoader, { OrderedImageItem } from '../batch-image-loader/batch-image-loader'
 import CircleLoader from '../circle-loader/circle-loader'
@@ -28,24 +27,29 @@ export interface SceneViewContent {
 }
 
 export interface SceneViewProps {
-  surfaceColorsFromParents: Array<MiniColor | null>
+  surfaceColorsFromParents: Array<Color | null>
   showClearButton?: boolean
   customButton?: JSX.Element
-  handleSurfacePaintedState?: Function
+  handleSurfacePaintedState?: (selectedSceneUid: string, variantName: string, colors: Color[]) => void
   allowVariantSwitch?: boolean
   interactive?: boolean
   selectedSceneUid: string
   scenesCollection: FlatScene[]
-  variantsCollection: FlatVariant[]
+  variantsCollection: Array<BasicVariant | FlatVariant>
   // This prop will only show the named variant here.
   selectedVariantName?: string
   showThumbnail?: boolean
   // this was added to address a css edge case where the svg needs to be auto height instead of 100%
   adjustSvgHeight?: boolean
   buttonPosition?: string
-  customToggle?: Function
+  customToggle?: (
+    vIndex: number,
+    vList: [CustomIcon, CustomIcon],
+    vHandler: () => void,
+    metadata: { sceneUid: string; currentVariant: string }
+  ) => JSX.Element
   // If a spinner is present it will not show the circle loader
-  spinner?: any
+  spinner?: ReactNode
   livePaletteColors?: { activeColor: Color }
   content: SceneViewContent
 }
@@ -73,17 +77,17 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
   const [selectedScene, setSelectedScene] = useState(null)
   const [sceneDims, setSceneDims] = useState({ sceneWidth: 1200, sceneHeight: 725 })
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0)
-  const [sceneVariants, setSceneVariants] = useState([])
+  const [sceneVariants, setSceneVariants] = useState<Array<BasicVariant | FlatVariant>>([])
   const [backgroundLoaded, setBackgroundLoaded] = useState(false)
-  const [surfaceColors, setSurfaceColors] = useState<Array<MiniColor | null>>(
-    surfaceColorsFromParents?.map((color: MiniColor | null) => {
+  const [surfaceColors, setSurfaceColors] = useState<Array<Color | null>>(
+    surfaceColorsFromParents?.map((color: Color | null) => {
       return color ? { ...color } : null
     }) || []
   )
 
   const [backgroundUrls, setBackgroundUrls] = useState([])
-  const isScenePolluted = (paintedSurfaces): boolean => {
-    return !!paintedSurfaces.reduce((acc: number, curr: number) => (curr ? 1 : 0) + acc, 0)
+  const isScenePolluted = (paintedSurfaces: Array<Color | null>): boolean => {
+    return !!paintedSurfaces.reduce((acc, curr) => (curr ? 1 : 0) + acc, 0)
   }
 
   useEffect(() => {
@@ -137,15 +141,17 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
     backgroundImageUrl: string,
     variant: FlatVariant,
     scene: FlatScene,
-    colors: Array<Color | MiniColor | null>,
-    lpColors,
+    surfaceColors: Color[],
+    lpColors: {
+      activeColor?: Color
+    },
     adjustSvg: boolean
   ): JSX.Element => {
-    const surfaceUrls = []
-    const surfaceIds = []
-    const highlightUrls = []
-    const shadowUrls = []
-    const surfaceHitAreas = []
+    const surfaceUrls: Array<string | null> = []
+    const surfaceIds: Array<number | null> = []
+    const highlightUrls: Array<string | null> = []
+    const shadowUrls: Array<string | null> = []
+    const surfaceHitAreas: Array<string | null> = []
 
     variant.surfaces.forEach((surface) => {
       const { surfaceBlobUrl, id, highlights, hitArea, shadows } = surface
@@ -159,7 +165,7 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
     const updateSurfaceColor = (surfaceIndex: number, selectedColor: Color): void => {
       const newSurfaceColors = surfaceColors.map((color, i) => {
         if (surfaceIndex === i) {
-          return selectedColor ? createMiniColorFromColor(selectedColor) : null
+          return selectedColor ?? null
         }
         return color
       })
@@ -204,7 +210,7 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
     setSurfaceColors(sceneVariants[selectedVariantIndex].surfaces.map((surface) => null))
   }
 
-  const changeVariant = (isOn: number): void => {
+  const changeVariant = (): void => {
     if (sceneVariants?.length && selectedVariantIndex + 1 < sceneVariants.length) {
       return setSelectedVariantIndex(selectedVariantIndex + 1)
     }
@@ -213,9 +219,8 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
 
   const getCustomButtons = (
     btn: JSX.Element | null,
-    toggle: Function,
-    shouldShowVariants,
-    variants: FlatVariant[],
+    shouldShowVariants: boolean,
+    variants: Array<BasicVariant | FlatVariant>,
     variantIndex: number,
     position: string = BUTTON_POSITIONS.BOTTOM
   ): JSX.Element => {
@@ -228,11 +233,7 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
     const thisVariant = variants?.length ? variants[variantIndex] : null
     const metadata = { sceneUid: thisVariant?.sceneUid, currentVariant: thisVariant?.variantName }
 
-    const getToggle = (
-      vIndex: number,
-      vList: [CustomIcon, CustomIcon],
-      vHandler: (isOn: number) => void
-    ): JSX.Element => {
+    const getToggle = (vIndex: number, vList: [CustomIcon, CustomIcon], vHandler: () => void): JSX.Element => {
       if (customToggle) {
         return customToggle(vIndex, vList, vHandler, metadata)
       }
@@ -264,7 +265,7 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
         {backgroundLoaded ? (
           getTintableScene(
             backgroundUrls[selectedVariantIndex],
-            sceneVariants[selectedVariantIndex],
+            sceneVariants[selectedVariantIndex] as FlatVariant,
             selectedScene,
             surfaceColors,
             livePaletteColors,
@@ -295,7 +296,6 @@ export default function SceneView(props: SceneViewProps): JSX.Element {
         {backgroundLoaded
           ? getCustomButtons(
               customButton,
-              customToggle,
               allowVariantSwitch && sceneVariants?.length > 1,
               sceneVariants,
               selectedVariantIndex,

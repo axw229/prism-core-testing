@@ -40,7 +40,13 @@ export default {
   }
 } as Meta<SearchProps>
 
-const MockedSearch = (args): JSX.Element => {
+type Props = SearchProps & {
+  title: string
+  subtitle: string
+  placeholder: string
+}
+
+const MockedSearch: Story<Props> = (args): JSX.Element => {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Color[]>([])
   const [isLoading, setLoading] = useState(false)
@@ -96,9 +102,9 @@ const MockedSearch = (args): JSX.Element => {
   )
 }
 
-const Template = (args): JSX.Element => <MockedSearch {...args} />
+const Template: Story<Props> = (args): JSX.Element => <MockedSearch {...args} />
 
-export const Primary: Story<SearchProps> = Template.bind({})
+export const Primary: Story<Props> = Template.bind({})
 Primary.args = {}
 
 export const WithTitle: Story = Template.bind({})

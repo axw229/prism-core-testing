@@ -3,7 +3,13 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["plugin:cypress/recommended", "standard-with-typescript", "eslint-config-prettier"],
+  "extends": [
+    "plugin:cypress/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "standard-with-typescript",
+    "eslint-config-prettier"
+  ],
   "plugins": ["@typescript-eslint", "react-hooks"],
   "settings": {
     "react": {

@@ -16,7 +16,7 @@ import isFunction from 'lodash/isFunction'
 import noop from 'lodash/noop'
 import { KEY_CODES } from '../../constants'
 import { ColorCollectionDetail } from '../../interfaces/colors'
-import { FlatScene, FlatVariant } from '../../interfaces/scene'
+import { FlatScene, FlatVariant } from '../../types'
 
 export const TEST_ID = {
   PREV: 'carousel-prev',

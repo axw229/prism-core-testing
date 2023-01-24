@@ -64,5 +64,5 @@
     "**/coverage/**": true,
     "**/dist/**": true
   },
-  "jest.jestCommandLine": "yarn test-watch"
+  "jest.jestCommandLine": "yarn test"
 }

@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionStatus } from 'react-transition-group'
 
 export interface InlineStyleTransitionProps {
   timeout: number
@@ -10,9 +10,9 @@ export interface InlineStyleTransitionProps {
   key?: string
   default?: CSSProperties
   entering?: CSSProperties
-  entered?:  CSSProperties
-  exiting?:  CSSProperties
-  exited?:  CSSProperties
+  entered?: CSSProperties
+  exiting?: CSSProperties
+  exited?: CSSProperties
 }
 
 const InlineStyleTransition = ({
@@ -26,34 +26,35 @@ const InlineStyleTransition = ({
   exited,
   ...rest
 }: InlineStyleTransitionProps): JSX.Element => {
-  const states = {
+  const states: Partial<Record<TransitionStatus, CSSProperties>> = {
     entering,
     entered,
     exiting,
-    exited,
+    exited
   }
 
-  return children ? <Transition
-    key={key}
-    timeout={timeout}
-    classNames={`__colors__color-`}
-    {...rest} >
-    {state => (
-      <div id={key} style={{
-        ...defaultProp,
-        ...states[state]
-      }}>
-        { children }
-      </div>
-    )}
-  </Transition> : null
+  return children ? (
+    <Transition key={key} timeout={timeout} classNames={`__colors__color-`} {...rest}>
+      {(state) => (
+        <div
+          id={key}
+          style={{
+            ...defaultProp,
+            ...states[state]
+          }}
+        >
+          {children}
+        </div>
+      )}
+    </Transition>
+  ) : null
 }
 InlineStyleTransition.defaultProps = {
   default: {},
   entering: {},
-  entered:  {},
-  exiting:  {},
-  exited:  {},
+  entered: {},
+  exiting: {},
+  exited: {}
 }
 
 export default InlineStyleTransition

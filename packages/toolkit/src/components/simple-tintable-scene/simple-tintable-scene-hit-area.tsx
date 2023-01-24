@@ -5,20 +5,21 @@ import memoizee from 'memoizee'
 import { getBeforeHash } from '../../utils/tintable-scene'
 import InlineSVG from '../inline-svg/inline-svg'
 
-export const makeHandleSvgLoaded = (success: Function, error: Function) => (failed) => {
-  if (failed) {
-    return error()
+export const makeHandleSvgLoaded =
+  (success: () => void, error: () => void) =>
+  (failed: boolean): void => {
+    if (failed) {
+      return error()
+    }
+
+    success()
   }
 
-  success()
-}
-
 export interface SimpleTintableSceneHitAreaProps {
-  connectDropTarget: Function
   surfaceIndex: number
-  interactionHandler: any
-  onLoadingSuccess?: Function
-  onLoadingError?: Function
+  interactionHandler: () => void
+  onLoadingSuccess?: () => void
+  onLoadingError?: () => void
   svgSource: string
 }
 
@@ -49,12 +50,12 @@ function SimpleTintableSceneHitArea({
 
   const handleSVGLoaded = makeHandleSvgLoaded(onLoadingSuccess, onLoadingError)
 
-  const handleMouseEnter = (e): void => {
+  const handleMouseEnter = (): void => {
     const newStyle = { ...svgStyles, opacity: 1 }
     setSvgStyles(newStyle)
   }
 
-  const handleMouseLeave = (e): void => {
+  const handleMouseLeave = (): void => {
     const newStyle = { ...svgStyles, opacity: 0 }
     setSvgStyles(newStyle)
   }

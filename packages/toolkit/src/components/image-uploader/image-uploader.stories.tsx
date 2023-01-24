@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react'
+import { Story } from '@storybook/react'
 import { ProcessedImageMetadata } from '../../types'
 import CircleLoader from '../circle-loader/circle-loader'
-import ImageUploader from './image-uploader'
+import ImageUploader, { ImageUploaderProps } from './image-uploader'
 
-const Template = (args): JSX.Element => {
+const Template: Story<ImageUploaderProps & { className: string }> = (args): JSX.Element => {
   const imageUploadRef = useRef<HTMLInputElement>()
   const [image, setImage] = useState<ProcessedImageMetadata>()
 
@@ -13,8 +14,8 @@ const Template = (args): JSX.Element => {
         Upload
       </button>
       <ImageUploader
-        {...args}
         className='flex justify-center items-center absolute top-0 right-4 bottom-4 left-0 w-full h-full z-10'
+        {...args}
         imageProcessLoader={<CircleLoader aria-label='loader' />}
         processedImageMetadata={(imageMetadata) => {
           args.processedImageMetadata(imageMetadata)

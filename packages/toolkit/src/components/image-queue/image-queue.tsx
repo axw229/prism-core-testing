@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react'
+import React, { ReactNode, SyntheticEvent } from 'react'
 
 export interface ImageQueueProps {
   dataUrls: string[]
@@ -8,8 +8,8 @@ export interface ImageQueueProps {
 export const TEST_ID_IMAGE_QUEUE_IMAGE = 'TEST_ID_IMAGE_QUEUE_IMAGE'
 
 const ImageQueue = (props: ImageQueueProps): JSX.Element => {
-  const mapImages = (dataUrls): HTMLImageElement[] => {
-    return dataUrls.map((dataUrl, i: number) => {
+  const mapImages = (dataUrls: string[]): ReactNode => {
+    return dataUrls.map((dataUrl, i) => {
       return (
         <img
           data-testid={TEST_ID_IMAGE_QUEUE_IMAGE}

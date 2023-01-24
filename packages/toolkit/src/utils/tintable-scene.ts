@@ -39,19 +39,18 @@ export function createUniqueSceneId(): string {
   return `${createTimestamp()}-${uniqueId()}`
 }
 
+// @todo: just use as the color as is? No performance penalty by using full object
 export function createMiniColorFromColor(color: Color): MiniColor {
-  if (!color) {
-    return null
+  return {
+    brandKey: color.brandKey,
+    id: color.id,
+    colorNumber: color.colorNumber,
+    red: color.red,
+    blue: color.blue,
+    green: color.green,
+    hex: color.hex,
+    L: color.lab.L,
+    A: color.lab.A,
+    B: color.lab.B
   }
-  const {
-    brandKey,
-    id,
-    colorNumber,
-    red,
-    blue,
-    green,
-    hex,
-    lab: { L, A, B }
-  } = color
-  return { brandKey, id, colorNumber, red, blue, green, L, A, B, hex }
 }
