@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import getElementRelativeOffset from 'get-element-relative-offset'
 import noop from 'lodash/noop'
 import { Color } from '../../interfaces/colors'
-import isSomething from '../../utils/isSomething'
+import isExplicitValue from '../../utils/isExplicitValue'
 import {
   ColorWallPropsContext,
   colorWallPropsDefault,
@@ -205,7 +205,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
 
   const [forceRerender, setForceRerender] = useState(false)
   const wallCtx = useMemo(() => {
-    const isZoomed = isSomething(activeColorId) || isSomething(initialFocusRef.current)
+    const isZoomed = isExplicitValue(activeColorId) || isExplicitValue(initialFocusRef.current)
     const { current } = findPositionInChunks(chunks.current, activeColorId)
 
     // TODO: why is this called test?
@@ -250,14 +250,14 @@ const ColorWall: ColorWallType = function ColorWall(props) {
   const { scale } = structuralWallCtx
   useEffect(() => {
     // if shouldRender is not true, there will be nothing rendered to scroll to
-    if ((isSomething(activeColorId) || isSomething(initialFocusRef.current)) && shouldRender) {
-      const goingTo = isSomething(initialFocusRef.current) ? initialFocusRef.current : activeColorId
+    if ((isExplicitValue(activeColorId) || isExplicitValue(initialFocusRef.current)) && shouldRender) {
+      const goingTo = isExplicitValue(initialFocusRef.current) ? initialFocusRef.current : activeColorId
       setFocusAndScrollTo({
         swatchId: goingTo,
         chunkId: getProximalChunksBySwatchId(chunks.current, goingTo)?.current?.id
       })
 
-      if (isSomething(initialFocusRef.current)) {
+      if (isExplicitValue(initialFocusRef.current)) {
         // get this chunk based on the swatch ID...
         const { current } = getProximalChunksBySwatchId(chunks.current, goingTo)
         // ... get this swatch ref based on found chunk and swatch ID...

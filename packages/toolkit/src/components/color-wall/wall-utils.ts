@@ -2,7 +2,7 @@ import chunk from 'lodash/chunk'
 import flattenDeep from 'lodash/flattenDeep'
 import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
-import isSomething from '../../utils/isSomething'
+import isExplicitValue from '../../utils/isExplicitValue'
 import {
   BASE_SWATCH_SIZE,
   MAX_BASE_SIZE,
@@ -98,7 +98,7 @@ export function getPerimeterLevelTest(
   id: string | number,
   levels = 0
 ): (id: string | number) => number {
-  if (chunkChildren && isSomething(id)) {
+  if (chunkChildren && isExplicitValue(id)) {
     if (levels === 0) {
       return () => 0
     } else {
@@ -154,7 +154,7 @@ export function getProximalSwatchesBySwatchId(
   chunkId: string | number,
   swatchId: string | number
 ): ProximalSwatch {
-  if (chunksSet && chunksSet.size > 0 && chunkId !== null && isSomething(swatchId)) {
+  if (chunksSet && chunksSet.size > 0 && chunkId !== null && isExplicitValue(swatchId)) {
     const hostChunk = Array.from(chunksSet).filter(({ id }) => id === chunkId)?.[0]
     const children = hostChunk?.data?.children
 
@@ -205,7 +205,7 @@ export function getProximalSwatchesBySwatchId(
 }
 
 export function findPositionInChunks(chunkSet: Set<ChunkData>, swatchId: string | number): ChunkPositions {
-  if (chunkSet?.size && isSomething(swatchId)) {
+  if (chunkSet?.size && isExplicitValue(swatchId)) {
     const _chunks = Array.from(chunkSet)
 
     const max = _chunks
