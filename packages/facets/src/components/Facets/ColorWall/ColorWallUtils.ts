@@ -200,7 +200,7 @@ export const makeChunkGrid = memoizee(
   ): string[][][][] => {
     const { gridWidth, chunkWidth, chunkHeight, firstRowLength, wrappingEnabled } = chunkGridParams
     const chunkedChunks: string[][][] = unChunkedChunks // convert chunk to strings because that is what the color wall currently expects
-      .map((unChunkedChunk: number[]): string[] => unChunkedChunk.map((id) => id.toString()))
+      .map((unChunkedChunk: number[]): string[] => unChunkedChunk?.map((id) => id.toString()))
       .map((unChunkedChunk: string[]): string[][] => {
         const chunkRowLength: number | null | undefined = chunkHeight ? unChunkedChunk.length / chunkHeight : chunkWidth
         return chunk(unChunkedChunk, chunkRowLength)
