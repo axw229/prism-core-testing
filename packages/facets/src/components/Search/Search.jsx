@@ -72,7 +72,10 @@ const Search = ({ closeSearch = () => {}, contain = false, crossSearch, isChipLo
     const result = results && results[columnIndex + rowIndex * parent.props.columnCount]
     // Default to unavailable for possible early renders
     const status = colorStatuses?.[result?.id] || {}
-    const swatchStatus = !!status.status
+    // NOTE: the only disabled swatch status is 0. if the value is anything OTHER THAN 0 (including undefined),
+    // we will treat it like an enabled swatch. therefor we are testing for "not zero" to mean enabled.
+    const swatchStatus = status.status !== 0
+
     const swatchClass = houseShaped ? 'Search--house-shaped' : 'swatch-content'
     const _style = houseShaped
       ? { ...style, width: style.width - 20, padding: '10px', textAlign: 'start' }
