@@ -10,8 +10,8 @@ import { getAlignment, parseColorId } from './wall-utils'
 interface ChunkProps {
   data: ChunkShape
   id: string
-  updateHeight: (height: any) => void
-  updateWidth: (width: any) => void
+  updateHeight: (height: number) => void
+  updateWidth: (width: number) => void
 }
 
 function Chunk({ data, id = '', updateHeight, updateWidth }: ChunkProps): JSX.Element {

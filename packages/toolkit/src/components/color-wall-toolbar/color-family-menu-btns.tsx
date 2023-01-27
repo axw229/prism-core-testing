@@ -7,7 +7,7 @@ interface ColorFamilyMenuBtnsProps {
   showAll?: boolean
   section: string
   families: string[]
-  onClick?: (args: any) => void
+  onClick?: (label: string) => void
   activeFamily?: string
 }
 

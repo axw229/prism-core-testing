@@ -6,7 +6,6 @@ time dimensionality for simplicity
 /* global FormData */
 import React, { ReactNode, SyntheticEvent, useEffect, useState } from 'react'
 import axios, { AxiosError } from 'axios'
-import at from 'lodash/at'
 import cloneDeep from 'lodash/cloneDeep'
 import { SCENE_TYPES, SYSTEM_ERROR } from '../../constants'
 import type {
@@ -60,6 +59,25 @@ export interface FastMaskProps {
 interface InitImageDimensions {
   width: number
   height: number
+}
+
+interface NestedArrayResponse {
+  per_img_resp: Array<
+    [
+      {
+        payload: {
+          id: string
+          lumped_path: string
+          mask_path0: string
+          orig_path: string
+          original_img_path: string
+          ran_realcolor: string
+          tinted_path: string
+        }
+      },
+      number
+    ]
+  >
 }
 
 function getInitDimsFromRef(refDims: ReferenceDimensions | null | undefined): InitImageDimensions | null {
@@ -172,9 +190,9 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
       uploadForm.append('image', blobData)
 
       axios
-        .post(apiUrl, uploadForm, {})
+        .post<NestedArrayResponse>(apiUrl, uploadForm, {})
         .then((res) => {
-          const mask = at(res as any, 'data.per_img_resp[0][0].payload')[0]
+          const mask = res.data.per_img_resp[0][0].payload
           if (!mask) {
             throw new Error('No relevant data in response')
           }

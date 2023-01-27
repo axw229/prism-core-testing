@@ -54,7 +54,6 @@ const Template = (args: { featureExclusions?: string[] }): JSX.Element => {
         </>
       ),
       items: exploreColorsItems,
-      onClick: (tab, index) => {},
       title: 'Explore all the ways to start building My Color Palette.'
     },
     {
@@ -81,7 +80,6 @@ const Template = (args: { featureExclusions?: string[] }): JSX.Element => {
           title: 'inspirational photos'
         }
       ],
-      onClick: (tab, index) => {},
       title: 'Find inspiration for your next painting project.'
     },
     {
@@ -107,7 +105,6 @@ const Template = (args: { featureExclusions?: string[] }): JSX.Element => {
           footnote: 'Photo Tips: For best results make sure your room is well lit. Natural light works best.'
         }
       ],
-      onClick: (tab, index) => {},
       title: 'Start Painting.'
     }
   ]
@@ -121,7 +118,6 @@ const Template = (args: { featureExclusions?: string[] }): JSX.Element => {
           description: <i>- Content of My Ideas Component -</i>
         }
       ],
-      onClick: (tab, index) => {},
       title: 'View and edit your saved ideas'
     })
 
@@ -133,7 +129,6 @@ const Template = (args: { featureExclusions?: string[] }): JSX.Element => {
         description: <i>- Content of Help Component -</i>
       }
     ],
-    onClick: (tab, index) => {},
     title: 'Helpful Hints'
   })
 

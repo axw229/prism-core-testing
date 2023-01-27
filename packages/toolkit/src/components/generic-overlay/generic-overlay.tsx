@@ -1,47 +1,53 @@
-import React, {CSSProperties, ReactNode} from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import classnames from 'classnames'
 import CircleLoader from '../circle-loader/circle-loader'
 
 type DisplayType = 'LOADING' | 'ERROR' | 'MESSAGE' | string
 
 export interface GenericOverlayProps {
-  children?: ReactNode,
-  type: DisplayType,
-  message?: string,
-  fillVertical?: boolean,
-  fillHorizontal?: boolean,
+  children?: ReactNode
+  type: DisplayType
+  message?: string
+  fillVertical?: boolean
+  fillHorizontal?: boolean
   semitransparent?: boolean
 }
 
-const getCssColors = (semitrans: boolean, type: DisplayType): {background: string, color: string} => {
+const getCssColors = (semitrans: boolean, type: DisplayType): { background: string; color: string } => {
   // TODO: Ask about color variables
   if (semitrans) {
     return {
       background: 'var(--prism-theme-color-primary-contrast-trans)',
-      color: 'var(--prism-theme-color-primary)',
+      color: 'var(--prism-theme-color-primary)'
     }
   } else {
-    switch(type) {
+    switch (type) {
       case 'MESSAGE':
         return {
           background: 'var(--prism-theme-color-primary)',
-          color: 'var(--prism-theme-color-primary-contrast-trans)',
+          color: 'var(--prism-theme-color-primary-contrast-trans)'
         }
       case 'ERROR':
         return {
           background: 'var(--prism-theme-color-danger)',
-          color: 'var(--prism-theme-color-danger-contrast-trans)',
+          color: 'var(--prism-theme-color-danger-contrast-trans)'
         }
       default:
         return {
           color: 'var(--prism-theme-color-primary-contrast)',
-          background: 'var(--prism-theme-color-primary-trans)',
+          background: 'var(--prism-theme-color-primary-trans)'
         }
     }
   }
 }
 
-const StyledContainer = ({type, semitransparent, fillVertical, fillHorizontal, children}: GenericOverlayProps): JSX.Element => {
+const StyledContainer = ({
+  type,
+  semitransparent,
+  fillVertical,
+  fillHorizontal,
+  children
+}: GenericOverlayProps): JSX.Element => {
   const style: CSSProperties = {
     zIndex: 2,
     padding: '.5em',
@@ -61,26 +67,30 @@ const StyledContainer = ({type, semitransparent, fillVertical, fillHorizontal, c
       'w-full': fillHorizontal,
       'w-auto': !fillHorizontal,
       'h-full': fillVertical,
-      'h-auto': !fillVertical,
-    },
+      'h-auto': !fillVertical
+    }
   )
 
-  return <div className={containerClass} style={style}>{children}</div>
+  return (
+    <div className={containerClass} style={style}>
+      {children}
+    </div>
+  )
 }
 
-const StyledContent = ({children}: any): JSX.Element => {
-  const className = classnames(
-    'text-inherit',
-    'font-bold',
-    'text-center'
-  )
+const StyledContent = ({ children }: { children: ReactNode }): JSX.Element => {
+  const className = classnames('text-inherit', 'font-bold', 'text-center')
 
   const style: CSSProperties = {
     fontSize: '.8em',
-    margin: '2px 0', // something truly small, just so things aren't touching
+    margin: '2px 0' // something truly small, just so things aren't touching
   }
 
-  return <span className={className} style={style}>{children}</span>
+  return (
+    <span className={className} style={style}>
+      {children}
+    </span>
+  )
 }
 
 function GenericOverlay(props: GenericOverlayProps): JSX.Element {
@@ -90,16 +100,12 @@ function GenericOverlay(props: GenericOverlayProps): JSX.Element {
 
   return (
     <StyledContainer {...props}>
-      {(type === GenericOverlay.TYPES.LOADING) && (
+      {type === GenericOverlay.TYPES.LOADING && (
         <StyledContent>
-            <CircleLoader />
-          </StyledContent>
+          <CircleLoader />
+        </StyledContent>
       )}
-      {output && (
-        <StyledContent>
-            {output}
-          </StyledContent>
-      )}
+      {output && <StyledContent>{output}</StyledContent>}
     </StyledContainer>
   )
 }

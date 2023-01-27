@@ -112,10 +112,10 @@ export type SwatchRenderer = <T extends SwatchInteractiveInternalProps>(internal
 export type SwatchBgRenderer = <T extends SwatchInternalProps>(internalProps: T) => JSX.Element
 
 export interface Dimensions {
-  heights: {}
   outerHeight: number
   outerWidth: number
-  widths: {}
+  heights: Record<number, number>
+  widths: Record<number, number>
 }
 
 // Color Types
@@ -131,12 +131,6 @@ export interface ColorStatus {
   status: number
 }
 export type ColorStatuses = Record<ColorId, ColorStatus>
-
-export interface ColorReference {
-  level: number
-  compensateX?: Function
-  compensateY?: Function
-}
 
 export interface Group {
   default: boolean

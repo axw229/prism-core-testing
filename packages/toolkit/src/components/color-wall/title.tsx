@@ -55,7 +55,7 @@ type QuickHeadingProps = {
   'data-testid'?: string
 } & HTMLAttributes<HTMLElement>
 
-function QuickHeading(lvl: number = 1, props: QuickHeadingProps, content: JSX.Element): JSX.Element {
+function QuickHeading(lvl = 1, props: QuickHeadingProps, content: JSX.Element): JSX.Element {
   const { className, ...otherProps } = props
 
   const newProps = {

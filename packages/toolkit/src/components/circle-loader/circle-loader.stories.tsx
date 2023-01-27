@@ -1,7 +1,8 @@
 import React from 'react'
-import CircleLoader from './circle-loader'
+import { Story } from '@storybook/react'
+import CircleLoader, { CircleLoaderProps } from './circle-loader'
 
-const Template = (args: {}): JSX.Element => {
+const Template: Story<CircleLoaderProps> = (args): JSX.Element => {
   return <CircleLoader {...args} />
 }
 

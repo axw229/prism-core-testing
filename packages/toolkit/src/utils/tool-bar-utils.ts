@@ -8,9 +8,10 @@ export const ROUTE_PARAMS = Object.freeze({
   SEARCH: 'search'
 })
 
-export function omitPrefix(str: string = ''): string {
+export function omitPrefix(str = ''): string {
   if (typeof str === 'string') {
     return str.replace(/@\|@.*@\|@/g, '')
   }
-  return ''
+
+  return str
 }

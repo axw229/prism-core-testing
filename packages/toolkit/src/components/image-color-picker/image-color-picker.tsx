@@ -1,4 +1,4 @@
-import React, { memo, MouseEvent, TouchEvent,useRef, useState } from 'react'
+import React, { memo, MouseEvent, TouchEvent, useRef, useState } from 'react'
 import clamp from 'lodash/clamp'
 import { Color } from '../../types'
 import { findClosestColor } from '../../utils/utils'
@@ -45,7 +45,9 @@ const ImageColorPicker = ({
 
   const getColor = (x: number, y: number): Color | null => {
     const { width, height } = canvasRef.current?.getBoundingClientRect() ?? { width: 0, height: 0 }
-    const targetRGB = canvasRef.current?.getContext('2d')?.getImageData(width * (x / 100), height * (y / 100), 1, 1).data
+    const targetRGB = canvasRef.current
+      ?.getContext('2d')
+      ?.getImageData(width * (x / 100), height * (y / 100), 1, 1).data
     return findClosestColor(targetRGB, colors)
   }
 
@@ -70,8 +72,11 @@ const ImageColorPicker = ({
   }
 
   // TODO: This function should likely moved out to a utility at some point
-  const getClientCoordsFromEvent = (e: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>): { clientX: number, clientY: number } => {
-    const isTouchEvent = (e: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>): e is TouchEvent<HTMLElement> => (e as TouchEvent).touches !== undefined
+  const getClientCoordsFromEvent = (
+    e: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>
+  ): { clientX: number; clientY: number } => {
+    const isTouchEvent = (e: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>): e is TouchEvent<HTMLElement> =>
+      (e as TouchEvent).touches !== undefined
 
     if (isTouchEvent(e)) {
       const touch = e.touches[0]
@@ -79,14 +84,14 @@ const ImageColorPicker = ({
 
       return {
         clientX,
-        clientY,
+        clientY
       }
     } else {
       const { clientX, clientY } = e
 
       return {
         clientX,
-        clientY,
+        clientY
       }
     }
   }
@@ -99,7 +104,7 @@ const ImageColorPicker = ({
       onColorSelected?.(pins[draggedPinIndex]?.color)
       setPins(pins.map((pin, i) => ({ ...pin, isOpen: i === draggedPinIndex && !pin.isOpen })))
       setDraggedPinIndex(null)
-    } else if ((clientX !== 0) && (clientY !== 0)) {
+    } else if (clientX !== 0 && clientY !== 0) {
       const [x, y] = toCanvasCoords(clientX, clientY)
       onColorSelected?.(getColor(x, y))
       setPins([...pins.map((pin) => ({ ...pin, isOpen: false })), { x, y, color: getColor(x, y), isOpen: true }])
@@ -139,7 +144,7 @@ const ImageColorPicker = ({
         onLoad={() => {
           setPins(
             initialPinLocations.map(({ x, y }, i) => {
-              const dimensionLimit = (d: number = 0): any => ((d - 24) * 100) / d
+              const dimensionLimit = (d = 0): number => ((d - 24) * 100) / d
               const xPoint = clamp(
                 x,
                 100 - dimensionLimit(canvasRef.current?.width),
