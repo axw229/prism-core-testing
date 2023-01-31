@@ -49,13 +49,13 @@ function ColorWallV3() {
   const { params } = useRouteMatch()
   const { colorId, family, section } = params
   const handleActiveColorId = useCallback(
-    (id) => {
+    (instanceId, { colorId: id }) => {
       const { brandKey, colorNumber, name } = colors.colorMap[id] || {}
       push(
         generateColorWallPageUrl(
           section,
           family,
-          id,
+          instanceId,
           fullColorName(brandKey, colorNumber, name, brandKeyNumberSeparator)
         )
       )
