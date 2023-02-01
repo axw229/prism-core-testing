@@ -37,6 +37,7 @@ import {
   getProximalChunksBySwatchId,
   getProximalSwatchesBySwatchId,
   needsToWrap,
+  parseColorId,
   sanitizeShape
 } from './wall-utils'
 
@@ -186,7 +187,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
 
   // this is fired from within swatchRenderer to activate a swatch
   const handleMakeActiveSwatchId = (id: number | string): void => {
-    onActivateColor(id)
+    onActivateColor(id, { colorId: parseColorId(id) })
     setTimeout(() => {
       // FUTURE TODO: we would really benefit from an id-based map of swatches in here.
       const { current } = getProximalChunksBySwatchId(chunks.current, id)
