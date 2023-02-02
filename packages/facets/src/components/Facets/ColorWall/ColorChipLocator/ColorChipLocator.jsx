@@ -16,7 +16,7 @@ import NavigatorArrow from './NavigatorArrow'
 import './ColorChipLocator.scss'
 import 'src/components/ColorSwatchContent/ColorSwatchContent.scss'
 
-type ColorChipLocatorProps = { color?: Color, onActivateColor: (id: string) => void }
+type ColorChipLocatorProps = { color?: Color, onActivateColor: (id: string, instanceId: { colorId: string }) => void }
 
 const ColorChipLocator = ({ color = undefined, onActivateColor }: ColorChipLocatorProps): Node => {
   const { brandId, brandKeyNumberSeparator }: ConfigurationContextType = useContext(ConfigurationContext)
