@@ -16,7 +16,7 @@ import isFunction from 'lodash/isFunction'
 import noop from 'lodash/noop'
 import { KEY_CODES } from '../../constants'
 import { ColorCollectionDetail } from '../../interfaces/colors'
-import { FlatScene, FlatVariant } from '../../interfaces/scene'
+import { FlatScene, FlatVariant } from '../../types'
 
 export const TEST_ID = {
   PREV: 'carousel-prev',
@@ -130,12 +130,11 @@ export interface CarouselProps {
   btnRefList?: Array<React.MutableRefObject<HTMLButtonElement>>
   getSummaryData?: (collectionSummaryData: ColorCollectionDetail) => void
   // These props are automagically passed hence the need for comments to silence them
-  deleteSavedScene?: Function
   leftButton?: DirectionalButtonOptions
   rightButton?: DirectionalButtonOptions
   scenes?: FlatScene[]
-  selectAnonStockScene?: Function
-  selectSavedScene?: Function
+  selectAnonStockScene?: (sceneId: number | string) => void
+  selectSavedScene?: (sceneId: number | string | null) => void
   showPageIndicators?: boolean
   variants?: FlatVariant[]
 }
@@ -184,15 +183,12 @@ const Carousel = (props: CarouselProps): JSX.Element => {
     const count = Math.floor(data.length / defaultItemsPerView)
     const numsOfViews = isInfinity ? count : count + 1
     for (let i = 0; i < numsOfViews; i++) {
-      const dataPerView: Object[] = indexedData.slice(
-        i * defaultItemsPerView,
-        i * defaultItemsPerView + defaultItemsPerView
-      )
+      const dataPerView = indexedData.slice(i * defaultItemsPerView, i * defaultItemsPerView + defaultItemsPerView)
       slideList.push(dataPerView)
     }
     if (isInfinity) {
       slideList.push([data[0]])
-      const dataPerView: Object[] = data.slice(-1)
+      const dataPerView = data.slice(-1)
       slideList.unshift(dataPerView)
     }
   }

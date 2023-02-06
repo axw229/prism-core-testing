@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import { faPlusCircle } from '@fortawesome/pro-light-svg-icons'
 import { faInfo, faTrash } from '@fortawesome/pro-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -76,7 +76,10 @@ describe('LivePalette Component', () => {
   const removeColorButton = (colorName: string): string => `Remove color ${colorName} from live palette`
   const addColorButton = 'ADD A COLOR'
 
-  const deleteButtonRenderer = ({ name }, onClick): JSX.Element => (
+  const deleteButtonRenderer = (
+    { name }: { name: string },
+    onClick: (e: MouseEvent<HTMLButtonElement>) => void
+  ): JSX.Element => (
     <button onClick={onClick}>
       <FontAwesomeIcon aria-label={removeColorButton(name)} icon={faTrash} />
     </button>

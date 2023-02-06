@@ -1,4 +1,4 @@
-import { FastMaskOpenCache, FlatScene, FlatVariant, ReferenceDimensions, Surface } from '../../types'
+import { Color, FastMaskOpenCache, FlatScene, FlatVariant, ReferenceDimensions, Surface } from '../../types'
 
 export const API_URL = '/prism-ml/'
 export const API_URL_ERR = '/prism-ml-error/'
@@ -47,13 +47,13 @@ export const PAYLOAD_FAIL_BLOB = {
   total_time: '4.97'
 }
 
-export const PAYLOAD_NO_MASK = {
+export const PAYLOAD_NO_MASK: Record<string, unknown> = {
   memchange: 0,
   per_img_resp: [],
   total_time: '4.97'
 }
 
-export const COLOR_1 = {
+export const COLOR_1: Color = {
   colorNumber: '6787',
   coordinatingColors: {
     coord1ColorId: '2837',
@@ -65,8 +65,6 @@ export const COLOR_1 = {
   isExterior: true,
   isInterior: true,
   name: 'Fountain',
-  lrv: 39.448,
-  brandedCollectionNames: [],
   colorFamilyNames: ['Blue'],
   brandKey: 'SW',
   red: 86,
@@ -80,7 +78,6 @@ export const COLOR_1 = {
   storeStripLocator: '167-C4',
   similarColors: ['2467', '11228', '2481', '2639', '2461', '2460', '2468', '2180', '2636', '2635'],
   ignore: false,
-  archived: false,
   lab: {
     L: 68.96002878880431,
     A: -21.95795490141206,

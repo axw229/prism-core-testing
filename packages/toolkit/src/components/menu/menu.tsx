@@ -4,7 +4,7 @@ export interface Tab {
   alignment?: 'center' | 'right'
   content: string | JSX.Element
   items?: TabItem[]
-  onClick?: (tab: any, index: number) => void
+  onClick?: (tab: Tab, index: number) => void
   title?: string
 }
 
@@ -22,7 +22,7 @@ export interface MenuProps {
     className: string
   }) => JSX.Element
   initialActiveTabIndex?: number
-  itemRenderer: (T: any) => JSX.Element
+  itemRenderer: (tabItems: TabItem) => JSX.Element
   tabs: () => Tab[]
 }
 
@@ -89,7 +89,9 @@ const Menu = ({ closeButtonRenderer, initialActiveTabIndex, itemRenderer, tabs }
       <ul className='xs:flex-1 flex justify-center'>
         {tabs().map(
           (tab, index) =>
-            (tab.alignment === undefined || tab.alignment === 'center') && <li key={index}>{getTabContent(tab, index)}</li>
+            (tab.alignment === undefined || tab.alignment === 'center') && (
+              <li key={index}>{getTabContent(tab, index)}</li>
+            )
         )}
       </ul>
       <ul className='flex justify-end'>

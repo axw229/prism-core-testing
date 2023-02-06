@@ -1,6 +1,6 @@
 import uniqueId from 'lodash/uniqueId'
 import { SCENE_TYPES, SCENE_VARIANTS } from '../../constants'
-import { PreparedSurface, SceneAndVariant } from '../../types'
+import { Color, PreparedSurface, SceneAndVariant, Surface } from '../../types'
 import { createUniqueSceneId } from '../../utils/tintable-scene'
 
 /**
@@ -23,24 +23,20 @@ export function createScenesAndVariants(assets: string[][], width: number, heigh
     description: ''
   }
 
-  const variants = assets.map((asset) => {
-    const variant = {
-      sceneType,
-      sceneId,
-      sceneUid,
-      variantName: SCENE_VARIANTS.MAIN,
-      image: asset[0],
-      thumb: asset[0],
-      surfaces: asset.slice(1).map((surface, i) => {
-        return {
-          id: i + 1,
-          surfaceBlobUrl: surface
-        }
-      })
-    }
-
-    return variant
-  })
+  const variants = assets.map((asset) => ({
+    sceneType,
+    sceneId,
+    sceneUid,
+    variantName: SCENE_VARIANTS.MAIN,
+    image: asset[0],
+    thumb: asset[0],
+    surfaces: asset.slice(1).map((surface, i) => {
+      return {
+        id: i + 1,
+        surfaceBlobUrl: surface
+      }
+    })
+  }))
 
   return {
     sceneUid,
@@ -49,21 +45,21 @@ export function createScenesAndVariants(assets: string[][], width: number, heigh
   }
 }
 
+// @todo: data seems to be already prepared in some areas, is this necessary?
 export function prepareData(
-  assets: string[],
+  image: string,
+  surfaces: Surface[],
   width: number,
   height: number,
-  surfaceColors,
-  variantName
+  surfaceColors: Color[],
+  variantName: string
 ): PreparedSurface {
   return {
-    image: assets[0],
-    surfaces: assets.slice(1),
+    image,
+    surfaces,
     width,
     height,
-    surfaceColors: surfaceColors.map((color) => {
-      return { ...color }
-    }),
+    surfaceColors,
     variantName,
     sceneType: SCENE_TYPES.FAST_MASK
   }

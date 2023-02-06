@@ -356,7 +356,8 @@ const ColorWall: ColorWallType = function ColorWall(props) {
   }, [shape, shouldRender, containerWidth])
 
   useEffect(() => {
-    if (!hasFocus) return () => {}
+    if (!hasFocus) return
+
     const handleKeyDown = (e: _KeyboardEvent): void => {
       if (!hasFocus) {
         return

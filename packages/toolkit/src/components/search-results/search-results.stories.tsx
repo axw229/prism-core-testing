@@ -11,7 +11,7 @@ export default {
 
 const children1 = <p>Children!</p>
 
-const Template = (args): JSX.Element => <SearchResults {...args} />
+const Template: Story<SearchResultsProps> = (args): JSX.Element => <SearchResults {...args} />
 
 export const Primary: Story<SearchResultsProps> = Template.bind({})
 Primary.args = {

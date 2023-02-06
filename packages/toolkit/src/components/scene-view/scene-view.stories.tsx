@@ -1,9 +1,9 @@
 import React from 'react'
+import { Story } from '@storybook/react'
 import { BUTTON_POSITIONS, SCENE_TYPES, SCENE_VARIANTS } from '../../constants'
 import { sw6084, sw7005, sw9053 } from '../../test-utils/mock-data'
-import { Color } from '../../types'
-import { createMiniColorFromColor } from '../../utils/tintable-scene'
-import SceneView, { SceneViewContent } from './scene-view'
+import { Color, FlatVariant } from '../../types'
+import SceneView, { SceneViewContent, SceneViewProps } from './scene-view'
 
 const selectedUid = 'scene-1'
 
@@ -36,9 +36,8 @@ const scenes = [
   }
 ]
 
-const variants = [
+const variants: FlatVariant[] = [
   {
-    id: 1,
     sceneUid: selectedUid,
     sceneId: 1,
     variantName: SCENE_VARIANTS.DAY,
@@ -52,7 +51,6 @@ const variants = [
     isFirstOfKind: true
   },
   {
-    id: 2,
     sceneUid: selectedUid,
     sceneId: 1,
     variantName: SCENE_VARIANTS.NIGHT,
@@ -82,7 +80,12 @@ const getColor = (colorStr: string): Color => {
   }
 }
 
-const Template = (args): JSX.Element => {
+type Props = SceneViewProps & {
+  surfaceColorsFromParents: string
+  content: string
+}
+
+const Template: Story<Props> = (args): JSX.Element => {
   const { content, surfaceColorsFromParents, allowVariantSwitch, showClearButton, buttonPosition, interactive } = args
   const color = getColor(surfaceColorsFromParents)
 
@@ -93,7 +96,7 @@ const Template = (args): JSX.Element => {
         buttonPosition={buttonPosition}
         allowVariantSwitch={allowVariantSwitch}
         showClearButton={showClearButton}
-        surfaceColorsFromParents={[createMiniColorFromColor(color)]}
+        surfaceColorsFromParents={[color]}
         selectedSceneUid={selectedUid}
         scenesCollection={scenes}
         variantsCollection={variants}

@@ -89,21 +89,13 @@ export interface FlatScene {
   height: number
   variantNames: string[]
   // variants prop is only used during transformation and should not be used at rest!
-  variants?: any[] | null
+  variants?: BasicVariant[] | null
   sceneType: string
   uid: string
   description: string
 }
 
-export interface FlatVariant {
-  sceneUid: string
-  sceneId: number
-  variantName: string
-  sceneType: string
-  // blob urls are not currently set when initialized but after they have been loaded
-  surfaces: Surface[]
-  image: string
-  thumb: string
+export interface FlatVariant extends BasicVariant {
   normalizedImageValueCurve: string
   sceneCategories?: string[] | null
   expertColorPicks: number[] | null
@@ -123,7 +115,7 @@ export interface BasicVariant {
 export interface FastMaskOpenCache {
   scene: FlatScene
   variant: FlatVariant
-  surfaceColors: MiniColor[]
+  surfaceColors: Color[]
 }
 
 export interface FastMaskWorkspace {
@@ -132,7 +124,7 @@ export interface FastMaskWorkspace {
   height: number
   image: string
   surfaces: string[]
-  surfaceColors: MiniColor[]
+  surfaceColors: Color[]
   variantName: string
   sceneType: string
 }
@@ -145,10 +137,10 @@ export interface SceneAndVariant {
 
 export interface PreparedSurface {
   image: string
-  surfaces: string[]
+  surfaces: Surface[]
   width: number
   height: number
-  surfaceColors: string[]
+  surfaceColors: Color[]
   variantName: string
   sceneType: string
 }

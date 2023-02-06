@@ -16,7 +16,6 @@ import {
   REF_DIMS,
   SAVE_DATA
 } from '../../test-utils/mocked-endpoints/fast-mask-mock-data'
-import { createMiniColorFromColor } from '../../utils/tintable-scene'
 import { TEST_ID_OUTER as TEST_ID_CIRCLE } from '../circle-loader/circle-loader'
 import FastMaskView, {
   TEST_ID_1,
@@ -36,7 +35,17 @@ const AWS_IMG_FAIL_URL = 'https://s3.us-east-2.amazonaws.com/sw-prism-fastmask/s
 const IMAGE = 'image'
 const WIDTH = 42
 const HEIGHT = 105
-const SURFACE = 'surface'
+const SURFACE = [
+  {
+    id: 1,
+    role: 'role',
+    thumb: 'thumb',
+    hitArea: 'area',
+    shadows: 'shadow',
+    highlights: 'highlight',
+    surfaceBlobUrl: 'url:blob'
+  }
+]
 
 const getImgReq = rest.get(TEST_IMG_URL, (req, res, ctx) => {
   return res(
@@ -615,7 +624,7 @@ describe('FastMask View', () => {
   })
 
   test('createScenesAndVariants should produce a valid object of type SceneAndVariant', () => {
-    const x = createScenesAndVariants([[IMAGE, SURFACE]], WIDTH, HEIGHT)
+    const x = createScenesAndVariants([[IMAGE, 'SURFACE']], WIDTH, HEIGHT)
 
     expect(x).not.toBe(null)
     expect(x.sceneUid).not.toBe(null)
@@ -628,8 +637,7 @@ describe('FastMask View', () => {
 
   test('prepareData should format saved data to fast mask type', () => {
     const VARIANT = 'foo'
-    const color = createMiniColorFromColor(COLOR_1)
-    const x = prepareData([IMAGE, SURFACE], WIDTH, HEIGHT, [color], VARIANT)
+    const x = prepareData(IMAGE, SURFACE, WIDTH, HEIGHT, [COLOR_1], VARIANT)
 
     expect(x).not.toBe(null)
     expect(x.image).toBe(IMAGE)

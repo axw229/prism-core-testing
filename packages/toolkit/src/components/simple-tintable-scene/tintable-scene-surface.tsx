@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import { SCENE_TYPES } from '../../constants'
 import { getBeforeHash } from '../../utils/tintable-scene'
 
@@ -7,12 +7,12 @@ export const getStyleValues = (
   shouldAdjustSvgHeight: boolean,
   scalingWidth: string | number,
   scalingHeight: string | number
-): any => {
+): CSSProperties | null => {
   if (!shouldScale && !shouldAdjustSvgHeight) {
     return null
   }
 
-  const styles: any = {}
+  const styles: CSSProperties = {}
 
   if (shouldScale) {
     styles.width = scalingWidth
@@ -33,7 +33,7 @@ export interface TintableSceneSurfaceProps {
   width?: string | number
   height?: string | number
   type: string
-  children: any
+  children: ReactNode
   // This prop will hardcode the width and height, use this when you need to programtically resize.
   scaleSvg?: boolean
   adjustSvgHeight?: boolean

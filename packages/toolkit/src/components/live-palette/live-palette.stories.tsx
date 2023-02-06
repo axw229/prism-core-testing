@@ -2,14 +2,22 @@ import React from 'react'
 import { faPlusCircle } from '@fortawesome/pro-light-svg-icons'
 import { faInfo, faTrash } from '@fortawesome/pro-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Story } from '@storybook/react'
 import { filter, shuffle, values } from 'lodash'
 import colorsData from '../../test-utils/mocked-endpoints/colors.json'
 import { colorOptions } from '../../test-utils/test-utils'
 import { Color } from '../../types'
 import ColorsIcon from '../colors-icon/colors-icon'
-import LivePalette from './live-palette'
+import LivePalette, { LivePaletteProps } from './live-palette'
 
-const Template = (args): JSX.Element => (
+type Props = LivePaletteProps & {
+  simple: boolean
+  onDetailsButtonTriggered: () => void
+  onAddButtonTriggered: () => void
+  colors: string[]
+}
+
+const Template: Story<Props> = (args): JSX.Element => (
   <LivePalette
     {...args}
     addButtonRenderer={(colors: Color[]) => (
@@ -30,7 +38,7 @@ const Template = (args): JSX.Element => (
       </button>
     )}
     className='xl:w-3/5'
-    colors={(args.colors ?? []).map((colorName) => colorOptions[colorName])}
+    colors={(args.colors ?? []).map((colorName: string) => colorOptions[colorName])}
     deleteButtonRenderer={({ name }, onClick) =>
       !args.simple && (
         <button className='md:ml-1 ring-primary focus:outline-none focus-visible:ring-2' onClick={onClick}>

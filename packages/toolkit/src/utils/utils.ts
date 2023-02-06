@@ -1,4 +1,4 @@
-import { Color, MiniColor } from '../types'
+import { Color } from '../types'
 
 // code lifted from https://github.com/antimatter15/rgb-lab/blob/master/color.js
 export function deltaE(labA: [number, number, number], labB: [number, number, number]): number {
@@ -34,11 +34,7 @@ export const findClosestColor = (targetRGB?: Uint8ClampedArray, colors: Color[] 
       ).color
     : null
 
-export const getCanvasTransformParams = (
-  angle: number = 0,
-  width: number,
-  height: number
-): { [key: string]: number } => {
+export const getCanvasTransformParams = (angle = 0, width: number, height: number): { [key: string]: number } => {
   let canvasHeight = 0
   let canvasWidth = 0
   const hScale = 1
@@ -69,7 +65,8 @@ export const getCanvasTransformParams = (
       canvasWidth = height
       vTrans = height
       break
-    default: // 0 degrees
+    default:
+      // 0 degrees
       canvasHeight = height
       canvasWidth = width
       rotation = 0
@@ -117,7 +114,7 @@ export function rgb2lab(rgb: Uint8ClampedArray): [number, number, number] {
   return [116 * y - 16, 500 * (x - y), 200 * (y - z)]
 }
 
-export function primeImage(baseImage: string, surface: string, callback: Function): void {
+export function primeImage(baseImage: string, surface: string, callback: (img: string) => void): void {
   function handleSurfaceLoaded(e: Event): void {
     const canvas = document.createElement('canvas')
     const img = e.target as HTMLImageElement
@@ -160,7 +157,7 @@ export function primeImage(baseImage: string, surface: string, callback: Functio
     ctx.restore()
 
     const primedImage = canvas.toDataURL()
-    callback(primedImage, width, height)
+    callback(primedImage)
 
     img.removeEventListener('load', handleSurfaceLoaded)
   }
@@ -178,7 +175,7 @@ export function primeImage(baseImage: string, surface: string, callback: Functio
   backgroundImage.src = baseImage
 }
 
-export function copySurfaceColors(surfaceColors: MiniColor[] | null): MiniColor[] | null {
+export function copySurfaceColors(surfaceColors: Color[] | null): Color[] | null {
   if (surfaceColors?.length) {
     return surfaceColors.map((color) => {
       return color ? { ...color } : null

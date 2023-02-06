@@ -1,7 +1,8 @@
 import React from 'react'
-import SpinnerLoader from './spinner-loader'
+import { Story } from '@storybook/react'
+import SpinnerLoader, { SpinnerLoaderProps } from './spinner-loader'
 
-const Template = (args: {}): JSX.Element => {
+const Template: Story<SpinnerLoaderProps> = (args): JSX.Element => {
   return <SpinnerLoader {...args} />
 }
 

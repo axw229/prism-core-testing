@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { DependencyList, EffectCallback, useEffect, useRef } from 'react'
 
 /**
  * Just like the useEffect hook, except it doesn't run on initial mount. This is useful for firing callbacks provided by parents
@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
  * @param {any[]} dependencies Array of dependencies to watch for changes
  */
 
-export default function useEffectAfterMount(cb, dependencies): void {
+export default function useEffectAfterMount(cb: EffectCallback, dependencies: DependencyList): void {
   const justMounted = useRef(true)
 
   useEffect(() => {

@@ -1,7 +1,9 @@
 import React from 'react'
+import { AxiosError } from 'axios'
+import { Color, PreparedSurface } from '../../types'
 import FastMaskView, { FastMaskProps } from './fast-mask'
 
-const color1 = {
+const color1: Color = {
   colorNumber: '6787',
   coordinatingColors: {
     coord1ColorId: '2837',
@@ -13,8 +15,6 @@ const color1 = {
   isExterior: true,
   isInterior: true,
   name: 'Fountain',
-  lrv: 39.448,
-  brandedCollectionNames: [],
   colorFamilyNames: ['Blue'],
   brandKey: 'SW',
   red: 86,
@@ -28,7 +28,6 @@ const color1 = {
   storeStripLocator: '167-C4',
   similarColors: ['2467', '11228', '2481', '2639', '2461', '2460', '2468', '2180', '2636', '2635'],
   ignore: false,
-  archived: false,
   lab: {
     L: 68.96002878880431,
     A: -21.95795490141206,
@@ -72,14 +71,14 @@ export const Default = Template.bind({})
 
 Default.args = {
   apiUrl: 'https://develop-prism-ml-api.ebus.swaws/prism-ml/',
-  handleSceneBlobLoaderError: (err) => console.error(err),
+  handleSceneBlobLoaderError: ({ err }: { err: string }) => console.error(err),
   refDims: null,
   imageUrl: 'https://sherwin.scene7.com/is/image/sw?src=ir{swRender/hd_livingroom2?wid=1200}&qlt=92',
   // fyi maskUrl: 'https://sherwin.scene7.com/is/image/sw?src=ir{swRender/hd_livingroom2?wid=1200&req=object&opac=100&fmt=png8&object=wall&color=000000}&fmt=png8&bgColor=FFFFFF&op_invert=1'
   activeColor: color1,
-  handleUpdates: (metadata) => console.log('Fastmask update', metadata),
+  handleUpdates: (metadata: PreparedSurface) => console.log('Fastmask update', metadata),
   cleanupCallback: () => console.log('Cleaning up fastmask'),
-  handleError: (err) => console.error(err),
+  handleError: (err: Error | AxiosError) => console.error(err),
   content: {
     userUploadAlt: 'The user uploaded this image',
     sceneView: {

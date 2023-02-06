@@ -29,7 +29,7 @@ export default {
   }
 } as Meta<SearchBarProps>
 
-const Template = (args): JSX.Element => <SearchBar {...args} />
+const Template: Story<SearchBarProps> = (args): JSX.Element => <SearchBar {...args} />
 
 export const Primary: Story<SearchBarProps> = Template.bind({})
 Primary.args = {

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, HTMLAttributes } from 'react'
 import './styles.css'
 
 export { default as BatchImageLoader } from './components/batch-image-loader/batch-image-loader'
@@ -31,16 +31,12 @@ export { default as ColorWall } from './components/color-wall/color-wall'
 export { default as ColorWallToolBar } from './components/color-wall-toolbar/color-wall-toolbar'
 export * from './types'
 
-export interface PrismProps {
+export interface PrismProps extends HTMLAttributes<HTMLElement> {
   children: JSX.Element
   theme?: CSSProperties
-  className?: string
-  style?: CSSProperties
-  other?: any
 }
 
 const Prism = ({ children, theme = {}, className, style, ...other }: PrismProps): JSX.Element => (
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   <div className={`${TOOLKIT_PROTECT_CLASS} ${className ?? ''}`} style={{ ...theme, ...style }} {...other}>
     {children}
   </div>

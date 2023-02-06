@@ -6515,9 +6515,12 @@ __metadata:
     "@thoughtbot/tailwindcss-aria-attributes": 0.2.0
     "@types/jest": 28.1.2
     "@types/lodash": 4.14.178
+    "@types/memoizee": 0.4.8
     "@types/node": 18.7.6
     "@types/react": 18.0.14
+    "@types/react-aria-live": 2.0.2
     "@types/react-aria-menubutton": 6.2.9
+    "@types/react-transition-group": 4.4.5
     "@types/react-virtualized": 9.21.20
     "@types/react-virtualized-auto-sizer": 1.0.1
     "@typescript-eslint/eslint-plugin": 4.33.0
@@ -9247,6 +9250,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/memoizee@npm:0.4.8":
+  version: 0.4.8
+  resolution: "@types/memoizee@npm:0.4.8"
+  checksum: fec135ca84426fc22aa69061c62c7139647c87a84b04d9b7abeb6a85dff334ebe901280c315728c096c931a723427b9a8abc52c54546745665b5107146b6b3ba
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:*":
   version: 3.0.1
   resolution: "@types/mime@npm:3.0.1"
@@ -9418,6 +9428,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-aria-live@npm:2.0.2":
+  version: 2.0.2
+  resolution: "@types/react-aria-live@npm:2.0.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: 2a1550af9535533c94440903a98565e422b24873fb3653bbcad55975124baa0454db37dc3be47a979e28ac47d29e074f0ab65738dc364c317c4de9d9cbb2c4e1
+  languageName: node
+  linkType: hard
+
 "@types/react-aria-menubutton@npm:6.2.9":
   version: 6.2.9
   resolution: "@types/react-aria-menubutton@npm:6.2.9"
@@ -9483,6 +9502,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 8f4dce3eb5c70178c5ec2f7434983d632d02a0371a80c31ea012e37a2b8b2174bee482c3b85764333cbe3bcba9132b95307e23ac56d05d490e485e371bdcea46
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:4.4.5":
+  version: 4.4.5
+  resolution: "@types/react-transition-group@npm:4.4.5"
+  dependencies:
+    "@types/react": "*"
+  checksum: 265f1c74061556708ffe8d15559e35c60d6c11478c9950d3735575d2c116ca69f461d85effa06d73a613eb8b73c84fd32682feb57cf7c5f9e4284021dbca25b0
   languageName: node
   linkType: hard
 

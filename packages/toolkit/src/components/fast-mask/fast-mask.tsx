@@ -4,17 +4,23 @@ time dimensionality for simplicity
 * @todo this comp needs to be rewritten when we start masking multiple surfaces. -RS
  */
 /* global FormData */
-import React, { SyntheticEvent, useEffect, useState } from 'react'
-import axios from 'axios'
-import at from 'lodash/at'
+import React, { ReactNode, SyntheticEvent, useEffect, useState } from 'react'
+import axios, { AxiosError } from 'axios'
 import cloneDeep from 'lodash/cloneDeep'
-import { SYSTEM_ERROR } from '../../constants'
-import type { Color, FastMaskOpenCache, MiniColor,ReferenceDimensions } from '../../types'
-import { createMiniColorFromColor } from '../../utils/tintable-scene'
+import { SCENE_TYPES, SYSTEM_ERROR } from '../../constants'
+import type {
+  BasicVariant,
+  Color,
+  FastMaskOpenCache,
+  FlatScene,
+  FlatVariant,
+  PreparedSurface,
+  ReferenceDimensions
+} from '../../types'
 import { primeImage } from '../../utils/utils'
 import CircleLoader from '../circle-loader/circle-loader'
 import SceneView, { SceneViewContent } from '../scene-view/scene-view'
-import { createScenesAndVariants, prepareData } from './fast-mask-utils'
+import { createScenesAndVariants } from './fast-mask-utils'
 
 export const TEST_ID = 'fast-mask-view'
 export const TEST_ID_1 = `${TEST_ID}_1`
@@ -32,20 +38,20 @@ export interface FastMaskContent {
 
 export interface FastMaskProps {
   apiUrl: string
-  handleSceneBlobLoaderError: Function
+  handleSceneBlobLoaderError: ({ type, err }: { type: string; err: string }) => void
   refDims?: ReferenceDimensions
   imageUrl: string
   activeColor: Color
-  handleUpdates: Function
-  cleanupCallback: Function
+  handleUpdates: (data: PreparedSurface) => void
+  cleanupCallback: () => void
   savedData?: FastMaskOpenCache
-  initHandler?: Function
+  initHandler?: () => void
   isForCVW?: boolean
   showSpinner?: boolean
   // this maps to multiple divs
   loadingMessage?: string[]
-  spinner?: any
-  handleError?: Function
+  spinner?: ReactNode
+  handleError?: (err: Error | AxiosError) => void
   shouldPrimeImage?: boolean
   content: FastMaskContent
 }
@@ -53,6 +59,25 @@ export interface FastMaskProps {
 interface InitImageDimensions {
   width: number
   height: number
+}
+
+interface NestedArrayResponse {
+  per_img_resp: Array<
+    [
+      {
+        payload: {
+          id: string
+          lumped_path: string
+          mask_path0: string
+          orig_path: string
+          original_img_path: string
+          ran_realcolor: string
+          tinted_path: string
+        }
+      },
+      number
+    ]
+  >
 }
 
 function getInitDimsFromRef(refDims: ReferenceDimensions | null | undefined): InitImageDimensions | null {
@@ -83,36 +108,37 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
     content
   } = props
   const [blobData, setBlobData] = useState(null)
-  const [surfaceColors, setSurfaceColors] = useState<Array<MiniColor | null>>([])
-  const [scenesCollection, setScenesCollection] = useState([])
-  const [variantsCollection, setVariantsCollection] = useState([])
+  const [surfaceColors, setSurfaceColors] = useState<Color[]>([])
+  const [scenesCollection, setScenesCollection] = useState<FlatScene[]>([])
+  const [variantsCollection, setVariantsCollection] = useState<Array<BasicVariant | FlatVariant>>([])
   const [blobUrls, setBlobUrls] = useState([])
   const [sceneUid, setSceneUid] = useState(null)
-  const [tintingColor, setTintingColor] = useState(createMiniColorFromColor(activeColor))
+  const [tintingColor, setTintingColor] = useState(activeColor)
   // This also acts as an additional ready flag
   const [initImageDims, setinitImageDims] = useState<InitImageDimensions | null>(getInitDimsFromRef(refDims))
   // bypass priming logic if there is no shouldPrimeImage flag
   const [imageProcessed, setImageProcessed] = useState(!shouldPrimeImage)
 
   useEffect(() => {
-    const newColor = createMiniColorFromColor(activeColor)
     if (variantsCollection.length) {
       // theres only 1 variant for fast mask
-      const { width: sceneWidth, height: sceneHeight } = scenesCollection[0]
-      const variant = variantsCollection[0]
-      const newSurfaceColors = variant.surfaces.map((surface) => newColor)
-      setSurfaceColors(newSurfaceColors)
-      props.handleUpdates(
-        prepareData(
-          [variant.image, ...variant.surfaces],
-          sceneWidth,
-          sceneHeight,
-          newSurfaceColors,
-          variant.variantName
-        )
-      )
+      const { width: sceneWidth, height: sceneHeight } = scenesCollection.at(0)
+      const variant = variantsCollection.at(0)
+      setSurfaceColors([activeColor])
+
+      // Data is already formated, no need to 'prepare'
+      props.handleUpdates({
+        image: variant.image,
+        surfaces: variant.surfaces,
+        width: sceneWidth,
+        height: sceneHeight,
+        surfaceColors: [activeColor],
+        variantName: variant.variantName,
+        sceneType: SCENE_TYPES.FAST_MASK
+      })
     }
-    setTintingColor(newColor)
+
+    setTintingColor(activeColor)
   }, [activeColor, variantsCollection, scenesCollection])
 
   useEffect(() => {
@@ -164,9 +190,9 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
       uploadForm.append('image', blobData)
 
       axios
-        .post(apiUrl, uploadForm, {})
+        .post<NestedArrayResponse>(apiUrl, uploadForm, {})
         .then((res) => {
-          const mask = at(res as any, 'data.per_img_resp[0][0].payload')[0]
+          const mask = res.data.per_img_resp[0][0].payload
           if (!mask) {
             throw new Error('No relevant data in response')
           }
@@ -205,21 +231,18 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
           if (isLive) {
             try {
               // "blobUrls" was not a scope issue in facets but for some reason it is now, atleast when debugging... so I renamed -RS
-              const _blobUrls = resp.map((_r) => {
-                const r = _r as any
-                return URL.createObjectURL(r.data)
-              })
+              const _blobUrls = resp.map(({ data }: { data: Blob }) => URL.createObjectURL(data))
               const { sceneUid, scenes, variants } = createScenesAndVariants(
                 [_blobUrls],
                 initImageDims.width,
                 initImageDims.height
               )
+
               // There is only one variant for fast mask, the main one.
-              const colors = variants[0].surfaces.map((surface) => tintingColor)
               setBlobUrls(_blobUrls)
               setSceneUid(sceneUid)
               setScenesCollection(scenes)
-              setSurfaceColors(colors)
+              setSurfaceColors([tintingColor])
               setVariantsCollection(variants)
             } catch {
               handleSceneBlobLoaderError({
@@ -231,7 +254,7 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
             console.warn('User interrupted the promise resolution.')
           }
         })
-        .catch((err) => {
+        .catch((err: Error | AxiosError) => {
           console.error('issue with segmentation: ', err)
           if (props.handleError) {
             props.handleError(err)
@@ -256,14 +279,14 @@ function FastMaskView(props: FastMaskProps): JSX.Element {
   useEffect(() => {
     let isLive = true
     if (variantsCollection.length && !imageProcessed) {
-      const handleImagePrimed = (img: HTMLImageElement, w, h): void => {
+      const handleImagePrimed = (img: string): void => {
         if (!isLive) {
           return
         }
         setImageProcessed(true)
-        const updatedVariantCollection = cloneDeep(variantsCollection)
+
         variantsCollection[0].image = img
-        setVariantsCollection(updatedVariantCollection)
+        setVariantsCollection(cloneDeep(variantsCollection))
       }
 
       const { image, surfaces } = variantsCollection[0]

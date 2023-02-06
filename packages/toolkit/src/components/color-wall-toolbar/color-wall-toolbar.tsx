@@ -42,7 +42,7 @@ export interface IColorWallToolbarProps {
     activeSubgroup: string
     primeColorWall: string
   }
-  toolBarConfig: { alwaysShowSubGroups: boolean; closeBtn: any; shouldShowCloseButton: boolean }
+  toolBarConfig: { alwaysShowSubGroups: boolean; closeBtn: Record<string, never>; shouldShowCloseButton: boolean }
 }
 const ColorWallToolbar = ({
   uiStyle,

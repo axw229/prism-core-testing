@@ -9,10 +9,9 @@ import SimpleTintableSceneHitArea, {
 const hitAreaProps: SimpleTintableSceneHitAreaProps = {
   surfaceIndex: 1,
   svgSource: 'foo',
-  connectDropTarget: () => {},
-  onLoadingSuccess: () => {},
-  onLoadingError: () => {},
-  interactionHandler: () => {}
+  onLoadingSuccess: () => undefined,
+  onLoadingError: () => undefined,
+  interactionHandler: () => undefined
 }
 
 describe('SimpleTintableSceneHitArea', () => {
@@ -76,7 +75,7 @@ describe('SimpleTintableSceneHitArea', () => {
   })
 
   describe('makeHandleSvgLoaded()', () => {
-    let handleSvgLoaded
+    let handleSvgLoaded: (failed: boolean) => void
     const onSuccess = jest.fn()
     const onError = jest.fn()
 

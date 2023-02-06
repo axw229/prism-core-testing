@@ -14,16 +14,16 @@ export interface SimpleTintableSceneProps {
   sceneType: string
   sceneName: string
   background: string
-  surfaceUrls: string[]
-  surfaceIds: number[]
-  surfaceHitAreas?: string[]
-  highlights?: any[]
-  shadows?: any[]
+  surfaceUrls: Array<string | null>
+  surfaceIds: Array<number | null>
+  surfaceHitAreas?: Array<string | null>
+  highlights?: Array<string | null>
+  shadows?: Array<string | null>
   width: number
   height: number
-  imageValueCurve?: any
+  imageValueCurve?: string
   interactive?: boolean
-  handleSurfaceInteraction?: Function
+  handleSurfaceInteraction?: (surfaceIndex: number) => void
   // This is a sparse array
   surfaceColors?: Array<Color | MiniColor | null>
   adjustSvgHeight?: boolean

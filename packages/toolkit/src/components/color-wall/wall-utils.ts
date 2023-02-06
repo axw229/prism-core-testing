@@ -70,7 +70,7 @@ export function parseColorId<T extends string | number>(instanceId: T): T {
   return typeof instanceId === 'string' ? (instanceId.split(SEPARATOR_INSTANCE_ID)[0] as T) : instanceId
 }
 
-export function getTitleFontSize(level: number = 1, scale: number = 1, constrained: boolean = false): number {
+export function getTitleFontSize(level = 1, scale = 1, constrained = false): number {
   const sizeMultiplier = TITLE_SIZE_RATIOS[level]
   const targetSize = BASE_SWATCH_SIZE * scale * sizeMultiplier
 
@@ -84,11 +84,11 @@ export function getTitleFontSize(level: number = 1, scale: number = 1, constrain
   return maxSize
 }
 
-export function getTitleContainerSize(level: number = 1, scale: number = 1): number {
+export function getTitleContainerSize(level = 1, scale = 1): number {
   return getTitleFontSize(level, scale, false) * 2.75
 }
 
-export function getCumulativeTitleContainerSize(levels: number[] = [], scale: number = 1): number {
+export function getCumulativeTitleContainerSize(levels: number[] = [], scale = 1): number {
   return levels.reduce((prev, next) => prev + getTitleContainerSize(next, scale), 0)
 }
 
@@ -286,8 +286,8 @@ export function needsToWrap(targetScale: number): boolean {
 }
 
 export function determineScaleForAvailableWidth(
-  wallWidth: number = 0,
-  containerWidth: number = 0,
+  wallWidth = 0,
+  containerWidth = 0,
   minWallSize: number = MIN_BASE_SIZE
 ): number {
   if (!isNaN(wallWidth)) {

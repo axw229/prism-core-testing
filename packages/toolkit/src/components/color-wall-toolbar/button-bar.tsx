@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes, ReactNode } from 'react'
 
 interface BarProps {
-  children: any
+  children: ReactNode
   style?: {
     borderRadius?: string
   }
@@ -18,13 +18,9 @@ function Bar(props: BarProps): JSX.Element {
   )
 }
 
-interface ButtonProps {
-  onClick?: (...args: any[]) => any
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   activeClassName?: string
-  className?: string
-  children: any
-  disabled?: boolean
-  style?: any
+  children: ReactNode
   isActive?: boolean
 }
 

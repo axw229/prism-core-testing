@@ -8,7 +8,7 @@ describe('ImageUploader Component', () => {
     global.URL.createObjectURL = jest.fn()
     global.Image = mockProcessedImageMetadataCallBack
 
-    render(<ImageUploader processedImageMetadata={() => {}} />)
+    render(<ImageUploader processedImageMetadata={mockProcessedImageMetadataCallBack} />)
 
     const upload = screen.getByTestId('input')
     const file = new File(['image'], 'landscape.jpg', { type: 'image/jpg' })
@@ -21,7 +21,9 @@ describe('ImageUploader Component', () => {
   })
 
   test('heic image upload and if it displays the loader when image is being processed', () => {
-    render(<ImageUploader processedImageMetadata={() => {}} />)
+    const mockProcessedImageMetadataCallBack = jest.fn()
+
+    render(<ImageUploader processedImageMetadata={mockProcessedImageMetadataCallBack} />)
 
     const upload = screen.getByTestId('input')
     const file = new File(['image'], 'landscape.jpg', { type: 'image/heic' })
