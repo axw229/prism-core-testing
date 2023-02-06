@@ -73,6 +73,46 @@
   }
 }
 
+.pin__content {
+  display: flex;
+  position: absolute;
+  right: 50%;
+  top: 0;
+  width: max-content;
+  z-index: -1;
+  &--left {
+    left: 50%;
+  }
+  &__wrapper {
+    height: 0;
+    margin-left: 360px;
+    position: relative;
+  }
+}
+
+.pin__name-number-house-shaped {
+  display: flex !important;
+  flex-direction: column-reverse;
+  padding: 0 0.9rem 0.4rem !important;
+
+  .pin__name {
+    font-family: var(getVarName('typography.bodyFontFamily'));
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  .pin__number {
+    font-family: var(getVarName('typography.titleFontFamily'));
+    font-size: .875rem;
+    padding-top: 0.3rem;
+  }
+
+  @include respond-below(xs) {
+    padding: 0 0.5rem 0.4rem !important;
+  }
+}
+
 .pin__name {
   display: block;
   font-weight: bold;
@@ -98,23 +138,6 @@
       display: none;
       width: 0;
     }
-  }
-}
-
-.pin__content {
-  display: flex;
-  position: absolute;
-  right: 50%;
-  top: 0;
-  width: max-content;
-  z-index: -1;
-  &--left {
-    left: 50%;
-  }
-  &__wrapper {
-    height: 0;
-    margin-left: 360px;
-    position: relative;
   }
 }
 

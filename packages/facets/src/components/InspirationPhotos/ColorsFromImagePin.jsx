@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect,useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { LiveMessage } from 'react-aria-live'
 import { useIntl } from 'react-intl'
 import { useDispatch,useSelector } from 'react-redux'
@@ -8,6 +8,8 @@ import { KEY_CODES } from 'src/constants/globals'
 import type { Color } from 'src/shared/types/Colors.js.flow'
 import 'src/providers/fontawesome/fontawesome'
 import { getContrastYIQ } from '../../../src/shared/helpers/ColorUtils'
+import type { ConfigurationContextType } from "../../contexts/ConfigurationContext/ConfigurationContext";
+import ConfigurationContext from "../../contexts/ConfigurationContext/ConfigurationContext";
 import { add } from '../../store/actions/live-palette'
 import { activedPinsHalfWidth } from './data'
 import './ColorPins.scss'
@@ -45,13 +47,14 @@ const PIN_MOVEMENT_SHIFT_KEY_INTERVAL = 1
 
 export default (props: Props) => {
   const { color, activatePin, handlePinMoveByKeyboard, handleKeyUpAfterPinMove, deleteCurrentPin, handleDrag, handleDragStop, handleTouchEnd } = props
-
+  const { colorWall: { colorSwatch = {} } } = useContext<ConfigurationContextType>(ConfigurationContext)
+  const { colorNumOnBottom = false, houseShaped = false } = colorSwatch
   const dispatch = useDispatch()
   const { formatMessage } = useIntl()
-  const livePaletteColors = useSelector(store => store.lp.colors)
   const colorDivRef: { current?: HTMLDivElement } = useRef()
-  const [isColorDivFocused: boolean, setIsColorDivFocused: boolean => void] = useState()
+  const livePaletteColors = useSelector(store => store.lp.colors)
   const isColorAdded = livePaletteColors.some(paletteColor => paletteColor.colorNumber === color.colorNumber)
+  const [isColorDivFocused, setIsColorDivFocused] = useState()
   const [isHidden, setIsHidden] = useState(false)
 
   useEffect(() => {
@@ -212,7 +215,11 @@ export default (props: Props) => {
             {(isColorAdded && !color.isActiveFlag) && (<FontAwesomeIcon style={{ color: getContrastYIQ(color.hex) }} icon={['fa', 'check-circle']} size='1x' />)}
           </div>
           <div className={`pin__content ${color.isContentLeft ? 'pin__content--left' : ''}`}>
-            <div className={`pin__name__wrapper ${color.isActiveFlag ? 'pin__name__wrapper--active' : 'pin__name__wrapper--inactive'}`}>
+            <div
+              className={`pin__name__wrapper ${
+                color.isActiveFlag ? 'pin__name__wrapper--active' : 'pin__name__wrapper--inactive'
+              }${color.isActiveFlag && colorNumOnBottom && houseShaped ? ' pin__name-number-house-shaped' : ''}`}
+            >
               <span className='pin__copy pin__number'>{(color.colorNumber) ? `${color.brandKey}${color.colorNumber}` : ''}</span>
               <span className='pin__copy pin__name'>{color.name}</span>
             </div>
