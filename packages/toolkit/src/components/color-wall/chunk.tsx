@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import isSomething from '../../utils/isSomething'
+import isExplicitValue from '../../utils/isExplicitValue'
 import { ColorWallPropsContext, ColorWallStructuralPropsContext } from './color-wall-props-context'
 import ColorWallSwatch from './color-wall-swatch'
 import { computeChunk } from './shared-reducers-and-computers'
@@ -68,7 +68,7 @@ function Chunk({ data, id = '', updateHeight, updateWidth }: ChunkProps): JSX.El
     (id: string | number) =>
       (swatches: HTMLButtonElement[]): void => {
         const refIndex = swatchRefsMap.current[id]
-        if (isSomething(refIndex)) {
+        if (isExplicitValue(refIndex)) {
           swatchRefs.current[refIndex] = {
             swatches,
             id
