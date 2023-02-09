@@ -423,7 +423,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
           break
         }
         case 'Escape': {
-          onActivateColor(null)
+          onActivateColor(null, { colorId: null })
           if (activeColorId) {
             // need to get whatever our previous active chunk was, and we need the first swatch
             // getInitialSwatchInChunk(intendedChunk, activeColorId)
@@ -519,7 +519,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
             <>
               {isZoomed ? (
                 <button
-                  onClick={() => onActivateColor()}
+                  onClick={() => onActivateColor(null, { colorId: null })}
                   data-testid='wall-zoom-btn'
                   className='flex absolute top-0 right-0 z-[1002] my-2.5 mx-5 rounded-full w-10 h-10 items-center justify-center color-buttonColor bg-buttonBgColor shadow hover:color-buttonHoverColor hover:bg-buttonHoverBgColor focus:color-buttonHoverColor focus:bg-buttonHoverBgColor active:color-buttonActiveColor active:bg-buttonActiveBgColor'
                   title={zoomOutTitle}
