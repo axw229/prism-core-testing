@@ -1,5 +1,17 @@
 # @prism/toolkit
 
+## 5.2.0
+
+### Minor Changes
+
+- 1385f25c: Enables the noImplicitAny rule, fixes all issues triggered by this new rule [DCT-588]
+
+### Patch Changes
+
+- dd1822c2: Use instance ID for activating colors on color wall
+- c7a2e026: Refactored utility function to be semantically meaningful [DCT-316]
+- 1f66518b: fixing any type in isExplicitValue [DCT-316]
+
 ## 5.1.0
 
 ### Minor Changes
