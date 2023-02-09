@@ -1,3 +1,3 @@
-export default function isExplicitValue(value: any): boolean {
+export default function isExplicitValue(value: unknown): boolean {
   return value !== null && typeof value !== 'undefined'
 }
