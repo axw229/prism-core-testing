@@ -52,13 +52,15 @@ export interface ColorWallConfig {
   zoomOutTitle?: string
 }
 
+type OnActivateColor = (uniqueId: number | string | null, otherData: { colorId?: number | string | null }) => void
+
 export interface WallProps {
   activeSwatchContentRenderer?: ActiveSwatchContentRenderer
   activeColorId?: number | string
   chunkClickable?: (chunkId: string) => void
   colorWallConfig?: ColorWallConfig
   height?: number
-  onActivateColor?: (id?: number | string) => void
+  onActivateColor?: OnActivateColor
   colorResolver: (id?: number | string) => Color
   shape: WallShape
   swatchRenderer?: SwatchRenderer
@@ -105,6 +107,10 @@ const ColorWall: ColorWallType = function ColorWall(props) {
   const { children: wallChildren = [], props: wallProps = {} } = useMemo(() => sanitizeShape(shape), [shape])
   const { wrap } = wallProps
   // this ensures numeric IDs are numeric (so '42' becomes 42), and string IDs remain strings
+
+  const deactivateColor = useCallback<() => void>(() => {
+    onActivateColor(null, { colorId: null })
+  }, [onActivateColor])
 
   /** @todo refactor to push implicit conversion up stack to strongly type internally, we should avoid coersion
    * the ternary still make the later code type check, we could reduce complexity by enforcing type higher up -RS
@@ -423,7 +429,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
           break
         }
         case 'Escape': {
-          onActivateColor(null, { colorId: null })
+          deactivateColor()
           if (activeColorId) {
             // need to get whatever our previous active chunk was, and we need the first swatch
             // getInitialSwatchInChunk(intendedChunk, activeColorId)
@@ -519,7 +525,7 @@ const ColorWall: ColorWallType = function ColorWall(props) {
             <>
               {isZoomed ? (
                 <button
-                  onClick={() => onActivateColor(null, { colorId: null })}
+                  onClick={deactivateColor}
                   data-testid='wall-zoom-btn'
                   className='flex absolute top-0 right-0 z-[1002] my-2.5 mx-5 rounded-full w-10 h-10 items-center justify-center color-buttonColor bg-buttonBgColor shadow hover:color-buttonHoverColor hover:bg-buttonHoverBgColor focus:color-buttonHoverColor focus:bg-buttonHoverBgColor active:color-buttonActiveColor active:bg-buttonActiveBgColor'
                   title={zoomOutTitle}
