@@ -3,7 +3,8 @@
 ## 5.2.0
 
 ### Patch Changes
-
+- 
+- Updated dependencies [944a961d]
 - Updated dependencies [dd1822c2]
 - Updated dependencies [c7a2e026]
 - Updated dependencies [1f66518b]

@@ -4,6 +4,7 @@
 
 ### Minor Changes
 
+- 944a961d: Fix zoom-out behaviour on ColorWallv3
 - 1385f25c: Enables the noImplicitAny rule, fixes all issues triggered by this new rule [DCT-588]
 
 ### Patch Changes

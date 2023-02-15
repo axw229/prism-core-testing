@@ -1,13 +1,15 @@
 # @prism/facets
-
+ 
 ## 5.2.0
 
 ### Patch Changes
 
+- 944a961d: removed duplicate webworker rule from webpack config [DCT-796]
 - f228393d: Adjusted match photo label pin style for hgtv cvw [MESP-6013]
 - dd1822c2: Use instance ID for activating colors on color wall
 - 26257ed1: Added fontawesome providers and adjusted color navigator arrow click func [DCT-674]
 - 1b6fb8f7: explicitly testing for disabled swatch states in search [DCT-761]
+- Updated dependencies [944a961d]
 - Updated dependencies [dd1822c2]
 - Updated dependencies [c7a2e026]
 - Updated dependencies [1f66518b]
