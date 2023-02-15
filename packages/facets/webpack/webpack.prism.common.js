@@ -140,26 +140,6 @@ module.exports = {
           filename: 'fonts/[name][ext]'
         }
       },
-      {
-        test: /\.worker\.js$/,
-        exclude:
-          /node_modules\/(?!(react-intl|intl-messageformat|intl-messageformat-parser|@firebase|@fortawesome\/react-fontawesome))/,
-        include: flags.srcPath,
-        use: [
-          {
-            loader: 'worker-loader',
-            options: {
-              inline: 'no-fallback'
-            }
-          },
-          {
-            loader: 'babel-loader',
-            options: {
-              configFile: path.resolve(__dirname, '../.babelrc')
-            }
-          }
-        ]
-      },
       ...moduleRuleJsx
     ]
   },
