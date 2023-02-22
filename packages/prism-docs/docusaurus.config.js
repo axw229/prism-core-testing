@@ -73,7 +73,7 @@ const config = {
             position: 'right'
           },
           {
-            href: 'https://prism.sherwin-williams.com/demo/index.html',
+            href: 'https://internal-prism.sherwin-williams.com/demo/',
             position: 'right',
             label: 'Demo'
           },
