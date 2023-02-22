@@ -3,8 +3,8 @@
 
 const pkg = require('./package.json')
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/github')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -26,7 +26,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en']
   },
 
   presets: [
@@ -35,15 +35,15 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          routeBasePath:'/',
-          sidebarPath: require.resolve('./sidebars.js'),
+          routeBasePath: '/',
+          sidebarPath: require.resolve('./sidebars.js')
         },
         blog: false,
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      }),
-    ],
+          customCss: require.resolve('./src/css/custom.css')
+        }
+      })
+    ]
   ],
   plugins: ['@docusaurus/theme-live-codeblock'],
 
@@ -51,37 +51,43 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       liveCodeBlock: {
-        playgroundPosition: 'top', //top | bottom
+        playgroundPosition: 'top' //top | bottom
       },
       navbar: {
         title: 'PRISM',
         logo: {
           alt: 'Digital Color Tools Logo',
-          src: 'img/dct_logo.png',
+          src: 'img/dct_logo.png'
         },
         items: [
           {
             type: 'doc',
             docId: 'getting-started',
             position: 'left',
-            label: 'Documentation',
+            label: 'Documentation'
+          },
+
+          {
+            label: 'Storybook',
+            href: 'https://internal-prism.sherwin-williams.com/storybook/toolkit/',
+            position: 'right'
           },
           {
             href: 'https://prism.sherwin-williams.com/demo/index.html',
             position: 'right',
-            label: 'Demo',
+            label: 'Demo'
           },
           {
             href: 'https://github.sherwin.com/SherwinWilliams/prism-core',
             label: 'GitHub',
-            position: 'right',
+            position: 'right'
           },
           {
             href: `https://prism.sherwin-williams.com/${pkg.version}-develop/index.html`,
             label: `v${pkg.version}`,
-            position: 'right',
-          },
-        ],
+            position: 'right'
+          }
+        ]
       },
       footer: {
         // style: 'dark',
@@ -91,36 +97,36 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/getting-started',
-              },
-            ],
+                to: '/docs/getting-started'
+              }
+            ]
           },
           {
             title: 'Community',
             items: [
               {
                 label: 'Confluence',
-                href: 'https://sherwin-williams.atlassian.net/wiki/spaces/ECOMM/pages/3645386/Digital+Color+Team',
-              },
-            ],
+                href: 'https://sherwin-williams.atlassian.net/wiki/spaces/ECOMM/pages/3645386/Digital+Color+Team'
+              }
+            ]
           },
           {
             title: 'More',
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.sherwin.com/SherwinWilliams/prism-core',
-              },
-            ],
-          },
+                href: 'https://github.sherwin.com/SherwinWilliams/prism-core'
+              }
+            ]
+          }
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Sherwin-Williams.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Sherwin-Williams.`
       },
       prism: {
         theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
-    }),
-};
+        darkTheme: darkCodeTheme
+      }
+    })
+}
 
-module.exports = config;
+module.exports = config
