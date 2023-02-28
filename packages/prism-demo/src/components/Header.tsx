@@ -1,5 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Popover } from '@headlessui/react'
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 export default function Header() {
   return (
