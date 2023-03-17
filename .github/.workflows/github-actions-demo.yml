@@ -1,13 +1,54 @@
-name: GitHub Actions Demo
-on: [push]
+name: Build and publish to Artifactory-dev
+
+on:
+  push:
+    branches:
+      - develop
+      - github-actions
+
 jobs:
-  Develop-Build:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn run build
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+#      - name: Configure npmrc
+#        run: echo "//artifactory.sherwin.com/artifactory/api/npm/sherwin-npm-local/:_auth=${NODE_AUTH_TOKEN}" >> .npmrc
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#
+#      - name: Update package version
+#        run: |
+#          # Get the current version number from package.json
+#          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+#
+#          # Append the build number to the version
+#          ARTIFACTORY_VERSION=${PACKAGE_VERSION}-build.${GITHUB_RUN_NUMBER}
+#
+#          # Update the package version in package.json
+#          npm version ${ARTIFACTORY_VERSION} --no-git-tag-version
+#
+#      - name: Publish to Artifactory
+#        run: npm publish --registry https://artifactory.sherwin.com/artifactory/api/npm/sherwin-npm-local/ --tag "next"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Sync to S3
+        run: aws s3 sync ./packages/facets/dist s3://sw-prism-web/gh-action-test/develop/
